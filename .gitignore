@@ -1,0 +1,23 @@
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environments and dependencies
+env/
+venv/
+*.env
+/static/
+# Ignore temporary or auto-generated scripts
+Scripts
+/Lib
+
+# Python packaging
+*.egg-info/
+*.eggs/
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Node.js dependencies
+node_modules/

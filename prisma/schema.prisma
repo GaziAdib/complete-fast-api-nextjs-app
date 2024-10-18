@@ -1,0 +1,25 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-py"
+  recursive_type_depth = 5
+}
+
+
+model Product {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  image       String?
+  title       String                               // Product title
+  category    String                               // Product category
+  description String?                               // Product description
+  price       Float                                // Product price
+}
