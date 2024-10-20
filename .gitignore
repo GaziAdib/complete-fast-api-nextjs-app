@@ -6,10 +6,10 @@ __pycache__/
 env/
 venv/
 *.env
-/static/
 # Ignore temporary or auto-generated scripts
 Scripts
 /Lib
+/static/
 
 # Python packaging
 *.egg-info/

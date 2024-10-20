@@ -6,32 +6,32 @@ from app.db_config.prisma_config import prisma
 class ProductService:
     async def get_all_products(self) -> List[ProductSchema]:
         prisma_products = await prisma.product.find_many()
-        return [ProductSchema(**product.dict()) for product in prisma_products]
+        return [ProductSchema(**product.model_dump()) for product in prisma_products]
 
     async def get_product_by_id(self, id: str) -> ProductSchema:
         product = await prisma.product.find_unique(where={'id': id})
         if not product:
             return None
-        return ProductSchema(**product.dict())
+        return ProductSchema(**product.model_dump())
 
     async def create_product(self, product: ProductCreate) -> ProductSchema:
-        new_product = await prisma.product.create(data=product.dict())
-        return ProductSchema(**new_product.dict())
+        new_product = await prisma.product.create(data=product.model_dump())
+        return ProductSchema(**new_product.model_dump())
 
     async def update_product(self, id: str, product: ProductUpdate) -> ProductSchema:
         updated_product = await prisma.product.update(
             where={'id': id},
-            data=product.dict(exclude_unset=True)
+            data=product.model_dump(exclude_unset=True)
         )
-        return ProductSchema(**updated_product.dict())
+        return ProductSchema(**updated_product.model_dump())
 
     async def delete_product_by_id(self, id: str) -> ProductSchema:
         deleted_product = await prisma.product.delete(where={'id': id})
-        return ProductSchema(**deleted_product.dict())
+        return ProductSchema(**deleted_product.model_dump())
 
     async def get_products_by_query(self, query: str) -> List[ProductSchema]:
         query_products = await prisma.product.find_many(where={'category': {'contains': query}})
-        return [ProductSchema(**product.dict()) for product in query_products]
+        return [ProductSchema(**product.model_dump()) for product in query_products]
 
 
 

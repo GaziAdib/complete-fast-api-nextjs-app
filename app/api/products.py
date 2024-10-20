@@ -24,6 +24,8 @@ async def get_products(product_service: ProductService = Depends()):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No products found")
     return products
 
+
+
 @router.put("/product/{id}/update", response_model=Product, status_code=status.HTTP_200_OK)
 async def update_product(id: str, product: ProductUpdate, product_service: ProductService = Depends()):
     existing_product = await product_service.get_product_by_id(id)
@@ -58,6 +60,14 @@ async def delete_product(id: str, product_service: ProductService = Depends()):
     logger.info(f"Product with id {id} deleted successfully.")
     
     return deleted_product
+
+
+@router.get("/products/{id}", response_model=Product, status_code=status.HTTP_200_OK)
+async def get_single_product(id:str, product_service: ProductService = Depends()):
+    product = await product_service.get_product_by_id(id)
+    if not product:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No product found")
+    return product
 
 
 @router.post('/product/create', response_model=Product, status_code=status.HTTP_201_CREATED)

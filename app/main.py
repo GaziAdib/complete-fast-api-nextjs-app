@@ -5,6 +5,7 @@ from app.db_config.prisma_config import connect_prisma, disconnect_prisma
 # for statsic files
 
 from fastapi.staticfiles import StaticFiles
+import os
 
 app = FastAPI()
 
@@ -19,7 +20,8 @@ app.add_middleware(
 )
 
 # mount for static files
-app.mount("/static", StaticFiles(directory="./static"), name="static")
+# app.mount("/static", StaticFiles(directory="./static"), name="static")
+app.mount("/static", StaticFiles(directory=os.path.join(os.getcwd(), "static")), name="static")
 
 
 @app.on_event("startup")
