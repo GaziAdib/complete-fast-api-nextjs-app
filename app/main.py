@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.products import router as product_router
 from app.db_config.prisma_config import connect_prisma, disconnect_prisma
+from contextlib import asynccontextmanager
 # for statsic files
 
 from fastapi.staticfiles import StaticFiles
@@ -24,15 +25,19 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory=os.path.join(os.getcwd(), "static")), name="static")
 
 
-@app.on_event("startup")
-async def startup():
-    await connect_prisma()  # Connect Prisma at startup
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    try:
+        await connect_prisma()
+        yield
+    finally:
+        await disconnect_prisma()
 
-@app.on_event("shutdown")
-async def shutdown():
-    await disconnect_prisma()  # Disconnect Prisma at shutdown
+app = FastAPI(lifespan=lifespan)
 
-app.include_router(product_router, prefix="/api")
+
+app.include_router(product_router, prefix='/api')
+
 
 # Entry point for Uvicorn to serve the app
 if __name__ == "__main__":
